@@ -3,6 +3,7 @@ export SSHPASS='live'
 ####            var=$(cat somefile) is more efficiently written var=$(<somefile)
 if [ -f ipList.txt ] ; then
     rm ipList.txt
+    touch ipList.txt
 fi
 if [ -f hashratesL3.txt ] ; then
     rm hashratesL3.txt
@@ -14,11 +15,10 @@ if [ -f moHashrates.txt ] ; then
 fi
 echo "Running Fping Scan To Gather Ips..."
 fping -a -g 10.2.0.0 10.2.3.254 2>/dev/null > ipList.txt
-server=$1
 l3Count=0
 s9Count=0
 notMiner=0
-for server in $(cat ipList.txt);
+for server in $(<ipList.txt);
 do
 	hashStats=$(echo -n "stats" | nc -w 1 $server 4028 | tr -d '\0') ## had to add last tr part cuz of persistant warnings i couldnt redirect
 	lessStats=$(echo -n "summary" | nc -w 1 $server 4028 | tr -d '\0')
@@ -39,7 +39,7 @@ do
 	pools=$( echo $POOLS | awk '{print $1}')
 	twelve=12
 #	if [[ $(echo "$HASHRATE > $twelve" | bc -l) -eq 0 ]]; then
-# min=$(echo 12.45 10.35 | awk '{if ($1 < $2) print $1; else print $2}')
+#	 min=$(echo 12.45 10.35 | awk '{if ($1 < $2) print $1; else print $2}')
 #		LOWHASH=" *** HASHRATE IS LOW"
 #	else
 ##	fi
@@ -67,8 +67,11 @@ do
 		let "notMiner+=1"
 		echo "$checks is NOT a miner" >> notMiner.txt
 	fi	
-	mac=$(./macFromIp.sh $server)
-	echo "$server is an $mType $mac With $MHASHRATE $GHASHRATE hashes, using pool: $pools  *** $LOWCARD" >> hashratesL3.txt
+	if [ -z $HASHRATE ]; then
+		continue
+	fi
+	mac=$(timeout 1 ./macFromIp.sh $server)
+	echo "$server is an $mType $mac With $MHASHRATE $GHASHRATE hashes, using pool: $pools  *** $LOWCARD" | tee -a hashratesL3.txt
 #	echo "$server with $GHASHRATE GH/s " >> hashratesL3.txt
 #	sshpass -e ssh -o StrictHostKeyChecking=no root@$server "hostname; echo "$server is at: $HASHRATE TH/s" " 2>/dev/null >> moHashrates.txt
 #	sshpass -p 'root' ssh -o StrictHostKeyChecking=no root@$server "hostname; echo "$server is at: $HASHRATE TH/s" " 2>/dev/null
