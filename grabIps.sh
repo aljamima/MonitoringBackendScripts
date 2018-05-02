@@ -1,4 +1,20 @@
 #!/bin/bash
+sudo -v
+clear
+function rootCheck () {
+if [[ $EUID -ne 0 ]]; then
+	echo "THIS SCRIPT MUST BE RUN WITH SUDO PRIVILEGES"
+	echo
+	sleep 1
+	echo "You Can Specify The Range You Want To Scan As An Argument At CLI: './grabIps.sh 10.2.1.1/22'"
+	echo "CTRL + C If You Want To Specify A Range, Or Continue To Let Me Decide"
+	exit 1
+else 
+	echo "You Can Specify The Range You Want To Scan As An Argument At CLI: './grabIps.sh 10.2.1.1/22'"
+	echo "CTRL + C If You Want To Specify A Range, Or Continue To Let Me Decide"
+fi
+
+}
 if [ -f /tmp/cidr.txt ] ; then
     rm /tmp/cidr.txt
     touch /tmp/cidr.txt
@@ -13,8 +29,13 @@ if [ -f results.csv ] ; then
     rm results.csv
     touch results.csv
 fi
-cidr="$(/home/chawn/ipFor.sh)"
+rootCheck
+if [ -z $1 ]; then
+	sudo zmap -i wlan0 --verbosity=4 -p 22 $cidr >> results.csv
+else
+	sudo zmap -i wlan0 --verbosity=4 -p 22 $1 >> results.csv
+fi
+cidr=$(ip a show wlan0 | grep -A8 -m1 MULTICAST|grep -m1 inet|cut -d' ' -f6)
 echo "Running Fping Scan To Gather Ips..."
 
-zmap -i eth1 --verbosity=4 -p 4028 -o results $cidr
 #zmap -B 10M -p 80 -n 10000 -o results.csv $cidr

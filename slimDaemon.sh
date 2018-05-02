@@ -51,7 +51,7 @@ do
 		mac=$(macFromIp $foundIp2)
 		postData $ipVar $position $mac
 		#sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 fpingOutput > fping.sorted
-#diff --changed-group-format="%>" --unchanged-group-format="" "zmap.sorted" "fping.sorted"
+		#diff --changed-group-format="%>" --unchanged-group-format="" "zmap.sorted" "fping.sorted"
 	done
   done
 done
