@@ -30,12 +30,12 @@ if [ -f results.csv ] ; then
     touch results.csv
 fi
 rootCheck
-if [ -z $1 ]; then
-	sudo zmap -i wlan0 --verbosity=4 -p 22 $cidr >> results.csv
+if [ -z ${1+x} ]; then
+	sudo fping -a -g $cidr 2>/dev/null >> results.csv
 else
-	sudo zmap -i wlan0 --verbosity=4 -p 22 $1 >> results.csv
+	sudo fping -a -g $1 2>/dev/null >> results.csv
 fi
-cidr=$(ip a show wlan0 | grep -A8 -m1 MULTICAST|grep -m1 inet|cut -d' ' -f6)
+cidr=$(ip a show eth1 | grep -A8 -m1 MULTICAST|grep -m1 inet|cut -d' ' -f6)
 echo "Running Fping Scan To Gather Ips..."
 
 #zmap -B 10M -p 80 -n 10000 -o results.csv $cidr

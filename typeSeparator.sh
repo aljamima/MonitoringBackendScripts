@@ -1,26 +1,54 @@
 #!/bin/bash
 #### START SCRIPTING
-#./grabIpZmap.sh
-./grabIps.sh
+####            var=$(cat somefile) is more efficiently written var=$(<somefile)
+
+##
+##    WE CAN SEPERATE BY SOFTWARE MINER IS RUNNING... 'bmMiner' for S9, 'gmMiner' for Genesis GPU, 'cgMiner' for the L3
+##
+rm -f results.csv 2>/dev/null
+touch results.csv
+if [ -z ${1+x} ]; then
+        echo "Starting To Scan 10.2.1.1/22 Range"
+	sudo fping -a -g 10.2.1.1/22 2>/dev/null > results.csv
+else
+        echo "Starting To Scan $1 Range"
+	sudo fping -a -g $1 2>/dev/null > results.csv
+fi
+echo "Finished Scan, Checking Miner Types"
 sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 results.csv > ips.sorted
-for server in $(cat ips.sorted); do
-	APISTATS=`echo -n "stats" | nc -w 1 $1 4028`
-	DESCR=`echo $APISTATS | sed -e 's/,/\n/g' | grep "Description" | cut -d "=" -f2`
-	MAC=$(./macFromIp.sh $server)
+for server in $(<ips.sorted); do
+	APISTATS=$(echo -n "stats" | nc -w 1 $server 4028 2>/dev/null)
+	DESCR=$(echo $APISTATS | sed -e 's/,/\n/g' | grep "Description" | cut -d "=" -f2)
+	MAC=$(timeout 1 ./macFromIp.sh $server)
 	BM="bm"
 	SG="sg"
+	CG="cg"
+	if [ -z ${MAC+x} ]; then
+		echo "$server Is Causing Problems" | tee -a /tmp/notMinerMacs.txt
+		continue
+	fi
 	if [[ $DESCR = $BM* ]]; then
-		echo "$server" >> /tmp/bmMinerIps.txt
-		echo "$server $MAC" >> /tmp/bmMinerIpsMacs.txt
+#		echo "$server" | tee -a /tmp/bmMinerIps.txt
+		echo "$server $MAC" | tee -a /tmp/bmMinerIpsMacs.txt
 	elif [[ $DESCR = $SG* ]]; then 
-		echo "$server" >> /tmp/sgMinerIps.txt
-		echo "$server $MAC" >> /tmp/sgMinerIpsMacs.txt
+#		echo "$server" | tee -a /tmp/sgMinerIps.txt
+		echo "$server $MAC" | tee -a /tmp/sgMinerIpsMacs.txt
+	elif [[ $DESCR = $CG* ]]; then 
+#		echo "$server" | tee -a /tmp/cgMinerIps.txt
+		echo "$server $MAC" | tee -a /tmp/cgMinerIpsMacs.txt
 	else
-		echo "$checks is NOT a miner" >> /tmp/notMiner.txt
-		echo "$server $MAC" >> /tmp/notMinerMacs.txt
+#		echo "$server is NOT a miner" | tee -a /tmp/notMiner.txt
+		echo "$server $MAC NOT A MINER" | tee -a /tmp/notMinerMacs.txt
 	fi
 done
 #sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 fpingOutput > fping.sorted
 #diff --changed-group-format="%>" --unchanged-group-format="" "zmap.sorted" "fping.sorted"
- 		
-	
+echo "cat /tmp/bmMinerIps.txt  -or-"
+echo "cat /tmp/bmMinerIpsMacs.txt"
+echo "cat /tmp/sgMinerIps.txt  -or-"
+echo "cat /tmp/sgMinerIpsMacs.txt"
+echo "cat /tmp/cgMinerIps.txt  -or-"
+echo "cat /tmp/cgMinerIpsMacs.txt"
+echo "cat /tmp/notMiner.txt  -or-"
+echo "cat /tmp/notMinerMacs.txt"
+wc -l /tmp/*.txt
