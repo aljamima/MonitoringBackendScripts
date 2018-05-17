@@ -1,6 +1,6 @@
 #!/bin/bash
 export SSHPASS='live'
-####            var=$(cat somefile) is more efficiently written var=$(<somefile)
+
 if [ -f ipList.txt ] ; then
     rm ipList.txt
     touch ipList.txt
@@ -72,12 +72,8 @@ do
 	fi
 	mac=$(timeout 1 ./macFromIp.sh $server)
 	echo "$server is an $mType $mac With $MHASHRATE $GHASHRATE hashes, using pool: $pools  *** $LOWCARD" | tee -a hashratesL3.txt
-#	echo "$server with $GHASHRATE GH/s " >> hashratesL3.txt
-#	sshpass -e ssh -o StrictHostKeyChecking=no root@$server "hostname; echo "$server is at: $HASHRATE TH/s" " 2>/dev/null >> moHashrates.txt
-#	sshpass -p 'root' ssh -o StrictHostKeyChecking=no root@$server "hostname; echo "$server is at: $HASHRATE TH/s" " 2>/dev/null
+
 done
-cat hashratesL3.txt
-wc -l hashratesL3.txt
 echo "$s9Count S9's UP"
 echo "$l3Count L3's UP"
 echo "$notMiner IPs that arent miners"
