@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -o functrace
 clear
 rm -f dhcpEDITING.conf 2>/dev/null
@@ -40,9 +40,9 @@ function grab_Hashrates_Genesis {
 		LOW=""
 	fi
 	mac=$(macFromIp $server)
-	echo "$server is $mType at: $HASHRATE GH/s and $GPUCOUNT Gpus $LOW" >> hashratesGenesis.txt
-	beginString="curl 'http://localhost:3000/employees/save' -H 'Origin: http://localhost:3000' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: en-US,en;q=0.9,es-419;q=0.8,es;q=0.7,ru;q=0.6' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' -H 'Cache-Control: max-age=0' -H 'Referer: http://localhost/employees/create' -H 'Connection: keep-alive' --data 'name=$server&mac=$mac&type=$mType&position=1-1-1-1&hashrate=$HASHRATE' --compressed"
-	eval $(echo $beginString)
+	echo "$server is $mType at: $HASHRATE GH/s and $GPUCOUNT Gpus $LOW" >> hashrates.txt
+#	beginString="curl 'http://localhost:3000/employees/save' -H 'Origin: http://localhost:3000' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: en-US,en;q=0.9,es-419;q=0.8,es;q=0.7,ru;q=0.6' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' -H 'Cache-Control: max-age=0' -H 'Referer: http://localhost/employees/create' -H 'Connection: keep-alive' --data 'name=$server&mac=$mac&type=$mType&position=1-1-1-1&hashrate=$HASHRATE' --compressed"
+#	eval $(echo $beginString)
 	done
 }
 function grab_Hashrates_Mgt {
@@ -62,10 +62,10 @@ function grab_Hashrates_Mgt {
 		LOW=""
 	fi
 	mac=$(macFromIp $server)
-	echo "$server is $mType at: $hashes TH/s with $BLADECOUNT cards mining $LOW" >> hashratesMgt.txt
+	echo "$server is $mType at: $hashes TH/s with $BLADECOUNT cards mining $LOW" >> hashrates.txt
 #### EVENTUALLY WE WILL MAKE THIS CONVERT GH INTO TH FOR READABILITy
-	beginString="curl 'http://localhost:3000/employees/save' -H 'Origin: http://localhost:3000' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: en-US,en;q=0.9,es-419;q=0.8,es;q=0.7,ru;q=0.6' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' -H 'Cache-Control: max-age=0' -H 'Referer: http://localhost:3000/employees/create' -H 'Connection: keep-alive' --data 'name=$server&mac=$mac&type=$mType&position=1-1-1-1&hashrate=$HASHRATE' --compressed"
-	eval $(echo $beginString)
+#	beginString="curl 'http://localhost:3000/employees/save' -H 'Origin: http://localhost:3000' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: en-US,en;q=0.9,es-419;q=0.8,es;q=0.7,ru;q=0.6' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' -H 'Cache-Control: max-age=0' -H 'Referer: http://localhost:3000/employees/create' -H 'Connection: keep-alive' --data 'name=$server&mac=$mac&type=$mType&position=1-1-1-1&hashrate=$HASHRATE' --compressed"
+#	eval $(echo $beginString)
 	done
 }
 function line_Count {
@@ -122,4 +122,3 @@ wc -l mgtList.txt
 wc -l genList.txt
 wc -l notMiner.txt
 echo "cat hashratesMgt.txt -OR- cat hashratesGenesis.txt "
-

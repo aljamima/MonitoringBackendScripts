@@ -1,0 +1,26 @@
+[3;J[H[2JRunning Fping Scan To Gather IPs
+Done With Fping, Starting To Gather Worker Names
+
+15 ipList.txt
+15 mgtList.txt
+0 genList.txt
+0 notMiner.txt
+cat hashratesMgt.txt -OR- cat hashratesGenesis.txt 
+[3;J[H[2JRunning Fping Scan To Gather IPs
+Done With Fping, Starting To Gather Worker Names
+
+0 ipList.txt
+0 mgtList.txt
+0 genList.txt
+0 notMiner.txt
+cat hashratesMgt.txt -OR- cat hashratesGenesis.txt 
+[3;J[H[2JRunning Fping Scan To Gather IPs
+Done With Fping, Starting To Gather Worker Names
+[3;J[H[2JRunning Fping Scan To Gather IPs
+Done With Fping, Starting To Gather Worker Names
+
+199 ipList.txt
+134 mgtList.txt
+0 genList.txt
+65 notMiner.txt
+cat hashratesMgt.txt -OR- cat hashratesGenesis.txt 

@@ -25,7 +25,7 @@ echo "Done With Fping, Starting To Gather Worker Names"
 for checks in $(cat /tmp/ipList.txt);
 do
 	apistats=`echo -n "pools" | nc $checks 4028 2>/dev/null`
-	worker=`echo $apistats | sed -e 's/,/\n/g' | grep "User" | cut -d "=" -f2`
+	worker=`echo $apistats | sed -e 's/,/\n/g' | grep -a "User" | cut -d "=" -f2`
 	echo "$checks is using worker $worker" | tee -a finList.txt	
 done
 echo "To See Results Cat /tmp/defaultWorkers.txt or /tmp/errorList.txt"
