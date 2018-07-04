@@ -29,8 +29,8 @@ for server in $(<ips.sorted); do
 		echo "$server $MAC" | tee -a /tmp/sgMinerIpsMacs.txt
 		echo "$server" > /tmp/sgminerIps.txt
 	elif [[ $DESCR = $CG* ]]; then 
-		mebbeMint=$(nmap -A $server | grep -i "dragonMint")
-		if [ $mebbeMint -eq 0 ]; then
+		mebbeMint=$(nmap -A $server)
+		if [[ $(echo $mebbeMint | grep -i "dragonmint") -eq 0 ]]; then
 			echo "$server" | tee -a /tmp/dragonMintIps.txt
 			echo "$server $MAC" | tee -a /tmp/dragonMintIpsMacs.txt
 		else
