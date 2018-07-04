@@ -30,7 +30,7 @@ for server in $(<ips.sorted); do
 		echo "$server" > /tmp/sgminerIps.txt
 	elif [[ $DESCR = $CG* ]]; then 
 		mebbeMint=$(nmap --script http-title $server)
-		if [[ $(echo $mebbeMint | grep -i "dragonmint") -eq 0 ]]; then
+		if [[ $(nmap --script http-title 10.2.1.120 |grep -i -q "dragonmint") -eq 0 ]]; then 
 			echo "$server" | tee -a /tmp/dragonMintIps.txt
 			#echo "$server $MAC" | tee -a /tmp/dragonMintIpsMacs.txt
 		else
