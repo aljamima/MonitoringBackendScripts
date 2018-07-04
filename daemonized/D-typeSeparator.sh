@@ -10,9 +10,9 @@ sudo rm -rf /tmp/*.txt 2>/dev/null
 
 sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 ipList.txt > ips.sorted
 for server in $(<ips.sorted); do
-	APISTATS=$(echo -n "stats" | nc -w 1 $server 4028 2>/dev/null | tr -d '\0')
-	DESCR=$(echo $APISTATS | sed -e 's/,/\n/g' | grep "Description" | cut -d "=" -f2)
-	MAC=$(timeout 1 ./macFromIp.sh $server)
+	APISTATS=$(echo -n "stats+summary" | nc -w 1 $server 4028 2>/dev/null | tr -d '\0')
+	DESCR=$(echo -n $APISTATS | sed -e 's/,/\n/g' | grep "Description" | cut -d "=" -f2)
+	#MAC=$(timeout 1 ./macFromIp.sh $server)
 	BM="bm"
 	SG="sg"
 	CG="cg"
@@ -29,14 +29,16 @@ for server in $(<ips.sorted); do
 		echo "$server $MAC" | tee -a /tmp/sgMinerIpsMacs.txt
 		echo "$server" > /tmp/sgminerIps.txt
 	elif [[ $DESCR = $CG* ]]; then 
-		if [[ nmap -A $server | grep -i "antminer" ]]; then
+		mebbeMint=$(nmap -A $server | grep -i "dragonMint")
+		if [ $mebbeMint ]; then
 			echo "$server" | tee -a /tmp/dragonMintIps.txt
 			echo "$server $MAC" | tee -a /tmp/dragonMintIpsMacs.txt
 			continue
+		else
+			echo "$server" | tee -a /tmp/cgMinerIps.txt
+			echo "$server $MAC" | tee -a /tmp/cgMinerIpsMacs.txt
+			echo "$server" > /tmp/cgminerIps.txt
 		fi
-		echo "$server" | tee -a /tmp/cgMinerIps.txt
-		echo "$server $MAC" | tee -a /tmp/cgMinerIpsMacs.txt
-		echo "$server" > /tmp/cgminerIps.txt
 	else
 #		echo "$server is NOT a miner" | tee -a /tmp/notMiner.txt
 		echo "$server $MAC NOT A MINER" | tee -a /tmp/notMinerMacs.txt
