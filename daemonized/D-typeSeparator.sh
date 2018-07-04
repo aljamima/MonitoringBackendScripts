@@ -16,10 +16,10 @@ for server in $(<ips.sorted); do
 	BM="bm"
 	SG="sg"
 	CG="cg"
-	if [ -z ${MAC+x} ]; then
-		echo "$server Is Causing Problems" | tee -a /tmp/notMinerMacs.txt
-		continue
-	fi
+	#if [ -z ${MAC+x} ]; then
+	#	echo "$server Is Causing Problems" | tee -a /tmp/notMinerMacs.txt
+	#	continue
+	#fi
 	if [[ $DESCR = $BM* ]]; then
 #		echo "$server" | tee -a /tmp/bmMinerIps.txt
 		echo "$server $MAC" | tee -a /tmp/bmMinerIpsMacs.txt
