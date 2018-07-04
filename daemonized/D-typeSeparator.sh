@@ -6,14 +6,7 @@ rm -f results.csv 2>/dev/null
 touch results.csv
 rm -f ips.sorted 2>/dev/null
 touch ips.sorted
-rm -f /tmp/bmMinerIpsMacs.txt 2>/dev/null
-touch /tmp/bmMinerIpsMacs.txt
-rm -f /tmp/sgMinerIpsMacs.txt 2>/dev/null
-touch /tmp/sgMinerIpsMacs.txt
-rm -f /tmp/cgMinerIpsMacs.txt 2>/dev/null
-touch /tmp/cgMinerIpsMacs.txt
-rm -f /tmp/notMinerMacs.txt 2>/dev/null
-touch /tmp/notMinerMacs.txt
+sudo rm -rf /tmp/*.txt 2>/dev/null
 
 sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 ipList.txt > ips.sorted
 for server in $(<ips.sorted); do
@@ -36,7 +29,7 @@ for server in $(<ips.sorted); do
 		echo "$server $MAC" | tee -a /tmp/sgMinerIpsMacs.txt
 		echo "$server" > /tmp/sgminerIps.txt
 	elif [[ $DESCR = $CG* ]]; then 
-		if [ nmap -A $server | grep -i "antminer" ]; then
+		if [[ nmap -A $server | grep -i "antminer" ]]; then
 			echo "$server" | tee -a /tmp/dragonMintIps.txt
 			echo "$server $MAC" | tee -a /tmp/dragonMintIpsMacs.txt
 			continue
