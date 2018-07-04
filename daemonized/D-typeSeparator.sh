@@ -23,23 +23,23 @@ for server in $(<ips.sorted); do
 	if [[ $DESCR = $BM* ]]; then
 #		echo "$server" | tee -a /tmp/bmMinerIps.txt
 		#echo "$server $MAC" | tee -a /tmp/bmMinerIpsMacs.txt
-		echo "$server" > /tmp/bmminerIps.txt
+		echo "$server" >> /tmp/bmminerIps.txt
 	elif [[ $DESCR = $SG* ]]; then 
 #		echo "$server" | tee -a /tmp/sgMinerIps.txt
 		#echo "$server $MAC" | tee -a /tmp/sgMinerIpsMacs.txt
-		echo "$server" > /tmp/sgminerIps.txt
+		echo "$server" >> /tmp/sgminerIps.txt
 	elif [[ $DESCR = $CG* ]]; then 
 		if [[ $(nmap -p 80 --script http-title $server |grep -iq "dragonmint") -eq 0 ]]; then 
-			echo "$server" | tee -a /tmp/dragonMintIps.txt
+			echo "$server" >> /tmp/dragonMintIps.txt
 			#echo "$server $MAC" | tee -a /tmp/dragonMintIpsMacs.txt
 		else
-			echo "$server" | tee -a /tmp/cgMinerIps.txt
+			echo "$server" >> /tmp/cgMinerIps.txt
 			#echo "$server $MAC" | tee -a /tmp/cgMinerIpsMacs.txt
 		fi
 	else
 #		echo "$server is NOT a miner" | tee -a /tmp/notMiner.txt
 		#echo "$server $MAC NOT A MINER" | tee -a /tmp/notMinerMacs.txt
-		echo "$server" > /tmp/notMinerIps.txt
+		echo "$server" >> /tmp/notMinerIps.txt
 	fi
 done
 
