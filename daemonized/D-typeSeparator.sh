@@ -30,10 +30,9 @@ for server in $(<ips.sorted); do
 		echo "$server" > /tmp/sgminerIps.txt
 	elif [[ $DESCR = $CG* ]]; then 
 		mebbeMint=$(nmap -A $server | grep -i "dragonMint")
-		if [ $mebbeMint ]; then
+		if [ $mebbeMint -eq 0 ]; then
 			echo "$server" | tee -a /tmp/dragonMintIps.txt
 			echo "$server $MAC" | tee -a /tmp/dragonMintIpsMacs.txt
-			continue
 		else
 			echo "$server" | tee -a /tmp/cgMinerIps.txt
 			echo "$server $MAC" | tee -a /tmp/cgMinerIpsMacs.txt
