@@ -22,6 +22,7 @@ do
 #	poolStats=`echo -n "pools" | nc $server 4028 2>/dev/null`
 	MHASHRATE=`echo $apistats | sed -e 's/,/\n/g' | grep "MHS av" | cut -d "=" -f2`     
 	GHASHRATE=`echo $hashStats | sed -e 's/,/\n/g' | grep "GHS av" | cut -d "=" -f2`
+	DRAGONHASH=$(echo -n "summary" | nc -w 1 $server 4028 | sed -e 's/,/\n/g' | grep -a "MHS av" | cut -d "=" -f2)
 #	THASHRATE=`echo $apistats | sed -e 's/,/\n/g' | grep "THS av" | cut -d "=" -f2`
 	POOLS=`echo $apistats | sed -e 's/,/\n/g' | grep "URL" | cut -d "=" -f2`
 	TYPE=`echo $lessStats | sed -e 's/,/\n/g' | grep "Description" | cut -d "=" -f2`
@@ -31,7 +32,7 @@ do
 #	FAN3=`echo $apistats | sed -e 's/,/\n/g' | grep "fan3=" | cut -d "=" -f2`
 #	HWPERCENT=`echo $apistats | sed -e 's/,/\n/g' | grep "Hardware%" | cut -d "=" -f2` #HW errors
 #	echo "$TYPE is at $server with, $MHASHRATE MH/s, $GHASHRATE GH/s and using pool: $POOLS mining at: $URL" >> hashratesGenesis.txt
-	echo  "$server with $GHASHRATE GH/s " >> hashratesL3.txt
+	echo  "$server with $GHASHRATE GH/s and $DRAGONHASH dragonHashers... " >> hashratesL3.txt
 
 #	sshpass -e ssh -o StrictHostKeyChecking=no root@$server "hostname; echo "$server is at: $HASHRATE TH/s" " 2>/dev/null >> moHashrates.txt
 #	sshpass -p 'root' ssh -o StrictHostKeyChecking=no root@$server "hostname; echo "$server is at: $HASHRATE TH/s" " 2>/dev/null
