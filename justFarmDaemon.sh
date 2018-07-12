@@ -1,5 +1,4 @@
 #!/bin/bash
-
 lastRecord=$(mysql -ss -u root -p'Frostfiredragon1!!'  minersdb -N -e "SELECT id FROM miners ORDER BY id DESC LIMIT 1";)
 firstRecord=$(mysql -ss -u root -p'Frostfiredragon1!!' minersdb -N -e "SELECT id FROM miners ORDER BY id ASC LIMIT 1";)
 recordCount=$(mysql -ss -u root -p'Frostfiredragon1!!' minersdb -N -e "SELECT COUNT(*) from miners";)
@@ -14,15 +13,13 @@ recordCount=$(mysql -ss -u root -p'Frostfiredragon1!!' minersdb -N -e "SELECT CO
         #fi
         #echo "$maxTemp"
 #}
-#currentIp=$(mysql -ss -u root -p'Frostfiredragon1!!' -Dminersdb -e "SELECT minerIp FROM miners WHERE id='$id';")
 
-#temps=$(./tempsApi.sh)
+farmName=$(./grabSiteName.sh)
 for id in $(seq $firstRecord $lastRecord); do 
-	currentIp=$(mysql -ss -u root -p'Frostfiredragon1!!' -Dminersdb -e "SELECT minerIp FROM miners WHERE id='$id';")
+	#currentIp=$(mysql -ss -u root -p'Frostfiredragon1!!' -Dminersdb -e "SELECT minerIp FROM miners WHERE id='$id';")
 	#mac=$(mysql -ss -u root -p'Frostfiredragon1!!' -Dminersdb -e "SELECT macAddress FROM miners WHERE id='$id';")
 	#currentTemp=$(temps $currentIp)
 	#farmName=$(./getSiteName.sh)
-	temps=$(./tempsApi.sh $currentIp | tail -n 1)
-	updateFarm="\"UPDATE miners SET maxTemp='$temps' WHERE id='$id';\""
+	updateFarm="\"UPDATE miners SET farmName='$farmName' WHERE id='$id';\""
 	eval $(echo mysql -u root -p'Frostfiredragon1!!' -Dminersdb -e "$updateFarm")
 done
