@@ -24,6 +24,10 @@ function hashrates {
 }
 for id in $(seq $firstRecord $lastRecord); do 
 	currentIp=$(mysql -ss -u root -p'Frostfiredragon1!!' -Dminersdb -e "SELECT minerIp FROM miners WHERE id='$id';")
+	minerMac=$(mysql -ss -u root -p'Frostfiredragon1!!' -Dminersdb -e "SELECT macAddress FROM miners WHERE id='$id';")
+	if [ -z "$currentIp" ]; then
+		currentIp=$(./ipFromDhcp.sh $minerMac)
+	fi
 	#mac=$(mysql -ss -u root -p'Frostfiredragon1!!' -Dminersdb -e "SELECT macAddress FROM miners WHERE id='$id';")
 	#currentTemp=$(temps $currentIp)
 	currentHashrate=$(hashrates $currentIp)
@@ -38,6 +42,8 @@ for id in $(seq $firstRecord $lastRecord); do
 	updateHash="\"UPDATE miners SET hashrate='$currentHashrate' WHERE id='$id';\""
 	#hashConcat="$connector $updateHash"
 	eval $(echo mysql -u root -p'Frostfiredragon1!!' -Dminersdb -e "$updateHash")
+	#updateMac="\"UPDATE miners SET macAddress='$minerMac' WHERE id='$id';\""
+	#eval $(echo mysql -u root -p'Frostfiredragon1!!' -Dminersdb -e "$updateMac")
 	#echo "$connector $updateHash"
 	#updateMaxTemp="\"UPDATE miners SET maxTemp='$currentTemp' WHERE id='$id';\""
 	#tempConcat="$connector $updateMaxTemp"
@@ -49,6 +55,7 @@ for id in $(seq $firstRecord $lastRecord); do
 	#updateUptime="mysql -u root -p'Frostfiredragon1!!' -h zoomhash.us -Dminersdb -e "UPDATE miners SET uptime = '$currentUptime' WHERE id='$id';""
 	#echo "$updateUptime" |tee -a >> logger
 	#updateIp=" UPDATE miners SET minerIp = '$currentIp' WHERE id='$id';"
+	#eval $(echo mysql -u root -p'Frostfiredragon1!!' -Dminersdb -e "$updateIp")
 	#echo "$connector $updateIp" |tee -a >> logger
 done
 
