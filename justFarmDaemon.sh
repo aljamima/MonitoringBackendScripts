@@ -14,12 +14,13 @@ recordCount=$(mysql -ss -u root -p'Frostfiredragon1!!' minersdb -N -e "SELECT CO
         #echo "$maxTemp"
 #}
 
-farmName=$(./grabSiteName.sh)
+FARMNAME=$(./grabSiteName.sh)
 for id in $(seq $firstRecord $lastRecord); do 
+	#farmName=$(./grabSiteName.sh)
 	#currentIp=$(mysql -ss -u root -p'Frostfiredragon1!!' -Dminersdb -e "SELECT minerIp FROM miners WHERE id='$id';")
 	#mac=$(mysql -ss -u root -p'Frostfiredragon1!!' -Dminersdb -e "SELECT macAddress FROM miners WHERE id='$id';")
 	#currentTemp=$(temps $currentIp)
 	#farmName=$(./getSiteName.sh)
-	updateFarm="\"UPDATE miners SET farmName='$farmName' WHERE id='$id';\""
+	updateFarm="\"UPDATE miners SET farmName='$FARMNAME' WHERE id='$id';\""
 	eval $(echo mysql -u root -p'Frostfiredragon1!!' -Dminersdb -e "$updateFarm")
 done
