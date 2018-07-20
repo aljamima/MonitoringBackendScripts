@@ -10,6 +10,9 @@ recordCount=$(mysql -ss -u root -p'Frostfiredragon1!!' minersdb -N -e "SELECT CO
 echo "first=$firstRecord last=$lastRecord count=$recordCount"
 
 function hashrates {
+	if [ -z "$1" ]; then
+		continue
+	fi
 	hashServer=$1
 	hashStats=$(echo -n "stats+devs+summary+pools" | nc -w 1 $hashServer 4028 | tr -d '\0')
 	HASHRATE=$(echo $hashStats | sed -e 's/,/\n/g' | grep -ia "GHS av" | cut -d "=" -f2 |tail -n 1)
