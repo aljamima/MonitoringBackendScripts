@@ -36,7 +36,6 @@ for id in $(seq $firstRecord $lastRecord); do
 	currentHashrate=${currentHashrate:0:6}
 	#connector="mysql -u root -p'Frostfiredragon1!!' -Dminersdb -e "
 	updateHash="\"UPDATE miners SET hashrate='$currentHashrate' WHERE id='$id';\""
-	#hashConcat="$connector $updateHash"
 	eval $(echo mysql -u root -p'Frostfiredragon1!!' -Dminersdb -e "$updateHash")
 	#echo "$connector $updateHash"
 	#updateMaxTemp="\"UPDATE miners SET maxTemp='$currentTemp' WHERE id='$id';\""

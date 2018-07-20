@@ -23,6 +23,9 @@ for id in $(seq $firstRecord $lastRecord); do
 	#currentTemp=$(temps $currentIp)
 	#farmName=$(./getSiteName.sh)
 	temps=$(./tempsApi.sh $currentIp | tail -n 1)
+	if [ -z $temps ]; then
+		temps=$(echo $hashStats | sed -e 's/,/\n/g' | grep -ia "temperature" | cut -d "=" -f2)
+	fi
 	updateFarm="\"UPDATE miners SET maxTemp='$temps' WHERE id='$id';\""
 	eval $(echo mysql -u root -p'Frostfiredragon1!!' -Dminersdb -e "$updateFarm")
 done

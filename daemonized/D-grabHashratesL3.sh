@@ -2,7 +2,8 @@
 export SSHPASS='live'
 
 if [ -f ipList.txt ] ; then
-    rm ipList.txt
+    #rm ipList.txt
+    touch ipList.txt
 fi
 if [ -f hashratesL3.txt ] ; then
     rm hashratesL3.txt
@@ -13,8 +14,8 @@ if [ -f moHashrates.txt ] ; then
     touch moHashrates.txt
 fi
 echo "Running Fping Scan To Gather Ips..."
-fping -a -g 10.2.0.0 10.2.3.254 2>/dev/null > ipList.txt
-for server in $(cat ipList.txt);
+#fping -a -g 10.2.0.0 10.2.3.254 2>/dev/null > ipList.txt
+for server in $(<ipList.txt);
 do
 	hashStats=$(echo -n "stats" | nc -w 1 $server 4028 2>/dev/null)
 	lessStats=$(echo -n "summary" | nc -w 1 $server 4028 2>/dev/null)
