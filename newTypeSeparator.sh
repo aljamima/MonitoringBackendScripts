@@ -1,5 +1,7 @@
 #!/bin/bash
 sudo -v
+rebootFlag="0"
+[ -z "$1" ] || rebootFlag="1"
 ## USE THIS CHIT:
 ###    ssh root@10.2.1.82 '/sbin/reboot -f'
 rm -f /tmp/*.txt 2>/dev/null
@@ -48,11 +50,15 @@ done
 
 typeSeparator
 
-for each in $(<lowHash.txt); do
-	sshpass -p admin ssh -o ConnectTimeout=10 -o stricthostkeychecking=no root@$each '{ sleep 1; reboot -f; } >/dev/null &'
-	sshpass -p root ssh -o ConnectTimeout=10 -o stricthostkeychecking=no root@$each '{ sleep 1; reboot -f; } >/dev/null &'
-	echo ""
-done
-
+if [ "$rebootFlag" -ne 0 ]; then
+	for each in $(<lowHash.txt); do
+		sshpass -p admin ssh -o stricthostkeychecking=no root@$each '/sbin/shutdown -r 1 >/dev/null &'
+		sshpass -p root ssh -o stricthostkeychecking=no root@$each '/sbin/shutdown -r 1 >/dev/null &'
+		echo ""
+	done
+else
+	echo "Reboot Flag Was NOT Set... "
+	cat lowHash.txt
+fi
 wc -l /tmp/*.txt
 wc -l lowHash.txt
