@@ -1,0 +1,23 @@
+
+real	25m28.118s
+user	9m44.940s
+sys	6m4.060s
+shawnm@divisionSSH:~/monitoringBackend $ time bash -xv ./justHashrateDaemon.sh 
+
+
+real	6m52.407s
+user	1m58.060s
+sys	0m51.540s
+shawnm@divisionSSH:~/monitoringBackend $ time bash -xv ./justFarmDaemon.sh 
+
+
+real	25m17.861s
+user	6m11.010s
+sys	3m52.950s
+shawnm@divisionSSH:~/monitoringBackend $ time bash -xv ./justTempsDaemon.sh 
+
+
+real	18m18.092s
+user	5m36.490s
+sys	3m29.150s
+shawnm@divisionSSH:~/monitoringBackend $ time bash -xv ./justWorkerDaemon.sh 
