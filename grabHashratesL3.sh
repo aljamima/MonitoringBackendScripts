@@ -1,5 +1,6 @@
 #!/bin/bash 
-export SSHPASS='live'
+# Password should be set via environment variable
+# export SSHPASS='live'  # Removed hardcoded password
 
 if [ -f ipList.txt ] ; then
     rm ipList.txt
@@ -34,7 +35,7 @@ do
 	echo  "$server with $GHASHRATE GH/s " >> hashratesL3.txt
 
 #	sshpass -e ssh -o StrictHostKeyChecking=no root@$server "hostname; echo "$server is at: $HASHRATE TH/s" " 2>/dev/null >> moHashrates.txt
-#	sshpass -p 'root' ssh -o StrictHostKeyChecking=no root@$server "hostname; echo "$server is at: $HASHRATE TH/s" " 2>/dev/null
+#	sshpass -p 'REDACTED' ssh -o StrictHostKeyChecking=no root@$server "hostname; echo "$server is at: $HASHRATE TH/s" " 2>/dev/null
 done
 cat hashratesL3.txt
 wc -l hashratesL3.txt
